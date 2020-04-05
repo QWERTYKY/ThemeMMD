@@ -17,7 +17,7 @@ UPDATE_URL = "https://api.twitter.com/1.1/statuses/update.json"
 RETWEET_URL = "https://api.twitter.com/1.1/statuses/retweet/{id}.json"
 SEARCH_URL = "https://api.twitter.com/1.1/search/tweets.json"
 
-SEARCH_Q = " exclude:retweets filter:media since:{yesterday}_JST_23:30:00 until:{today}_JST_23:30:00"
+SEARCH_Q = " exclude:retweets filter:media since:{yesterday}_23:30:00_JST until:{today}_23:30:00_JST"
 CURRENT_PATH = f"{os.path.dirname(os.path.abspath(__file__))}/"
 BOT_PATH = ""
 
@@ -170,7 +170,7 @@ try:
 		作品RT
 		"""
 		# 作品検索
-		params = {"q" : SEARCH_Q.format(yesterday=(datetime.date.today() - datetime.timedelta(days=1)).strftime("%Y-%m-%d"), today=(datetime.date.today() + datetime.timedelta(days=1)).strftime("%Y-%m-%d")), \
+		params = {"q" : SEARCH_Q.format(yesterday=(datetime.date.today() - datetime.timedelta(days=1)).strftime("%Y-%m-%d"), today=(datetime.date.today()).strftime("%Y-%m-%d")), \
 			"result_type" : "recent", \
 			"count" : "100", \
 			}
