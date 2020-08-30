@@ -4,8 +4,8 @@
 Pythonで動作するお題抽選botです
 
 ### 動作環境
-Python 3.6.6
-CentOS
+Python 3.8.1
+CentOS 8
 
 ### 開発環境
 Visual Studio Code
