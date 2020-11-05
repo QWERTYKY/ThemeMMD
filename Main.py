@@ -16,6 +16,8 @@ from config import *
 UPDATE_URL = "https://api.twitter.com/1.1/statuses/update.json"
 RETWEET_URL = "https://api.twitter.com/1.1/statuses/retweet/{id}.json"
 SEARCH_URL = "https://api.twitter.com/1.1/search/tweets.json"
+BLOCK_URL = "https://api.twitter.com/1.1/blocks/ids.json"
+MUTE_URL = "https://api.twitter.com/1.1/mutes/users/ids.json"
 
 SEARCH_Q = " exclude:retweets filter:media since:{yesterday}_23:30:00_JST until:{today}_23:30:00_JST"
 CURRENT_PATH = f"{os.path.dirname(os.path.abspath(__file__))}/"
@@ -169,6 +171,13 @@ try:
 		"""
 		作品RT
 		"""
+		# ミュート&ブロックリスト取得
+		params = {}
+		req = TwitterAPI_get(twitter, MUTE_URL, params, LogTxt)
+		muteList = json.loads(req.text)
+		req = TwitterAPI_get(twitter, BLOCK_URL, params, LogTxt)
+		blockList = json.loads(req.text)
+
 		# 作品検索
 		params = {"q" : SEARCH_Q.format(yesterday=(datetime.date.today() - datetime.timedelta(days=1)).strftime("%Y-%m-%d"), today=(datetime.date.today()).strftime("%Y-%m-%d")), \
 			"result_type" : "recent", \
@@ -181,6 +190,9 @@ try:
 		for item in textJson["statuses"]:
 			# RT済はパス
 			if item["retweeted"]:
+				continue
+			# ミュートもしくはブロックしているユーザーはパス
+			if item["user"]["id"] in muteList["ids"] or item["user"]["id"] in blockList["ids"]:
 				continue
 			params = {"id" : item["id"]}
 			TwitterAPI_post(twitter, RETWEET_URL.format(id=item["id_str"]), params, LogTxt)
