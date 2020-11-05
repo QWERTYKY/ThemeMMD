@@ -3,3 +3,4 @@ log.log
 config.py
 copy.bat
 __pycache__
+.vscode
